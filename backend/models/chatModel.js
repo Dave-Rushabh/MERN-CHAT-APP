@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const chatModel = mongoose.Schema(
   {
@@ -10,21 +10,21 @@ const chatModel = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     latestMessage: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+      ref: 'Message',
     },
     groupAdmin: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const Chat = mongoose.model("Chat", chatModel);
+const Chat = mongoose.model('Chat', chatModel);
 
 module.exports = Chat;
