@@ -41,13 +41,6 @@ const SignUp = () => {
     setLoading(true);
 
     if (params === undefined) {
-      toast({
-        title: 'Please select an image !',
-        status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-      });
       setLoading(false);
       return;
     }
