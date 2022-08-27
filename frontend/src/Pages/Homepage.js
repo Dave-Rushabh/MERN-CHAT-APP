@@ -24,7 +24,7 @@ const Homepage = () => {
           p={3}
           bg="#023047"
           w="100%"
-          m="40px 0px 15px 0px"
+          m="10px 0px 15px 0px"
           borderRadius="lg"
         >
           <Text fontSize="2xl" color="white">
@@ -33,7 +33,7 @@ const Homepage = () => {
         </Box>
         <Box
           p={4}
-          margin="50px"
+          margin="5px 0px 25px"
           bg="#023047"
           w="100%"
           borderRadius="lg"
