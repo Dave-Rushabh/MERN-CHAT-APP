@@ -18,4 +18,4 @@ app.get('/dummy', (req, res) => {
   res.send('API is running');
 });
 
-app.listen(PORT, console.log('started server on port 5000'));
+app.listen(PORT, console.log(`started server on port ${PORT}`));
