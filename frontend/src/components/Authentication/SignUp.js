@@ -48,6 +48,7 @@ const SignUp = () => {
         isClosable: true,
         position: 'top',
       });
+      setLoading(false);
       return;
     }
 
