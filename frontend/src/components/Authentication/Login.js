@@ -126,7 +126,7 @@ const Login = () => {
         fontWeight="thin"
         style={{ marginTop: '20px' }}
       >
-        Login as a Guest User
+        Guest User Credentials
       </Button>
     </VStack>
   );

@@ -21,10 +21,6 @@ app.use(function (req, res, next) {
 
 const PORT = process.env.PORT || 7000;
 
-app.get('/test', (req, res) => {
-  res.send('API is running');
-});
-
 app.use('/api/user', userRoutes);
 
 // if any route is not matched, it will fall back to the below handlers
