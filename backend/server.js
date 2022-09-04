@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./configs/db');
 const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 // add all other routes here
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -22,6 +23,7 @@ app.use(function (req, res, next) {
 const PORT = process.env.PORT || 7000;
 
 app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
 
 // if any route is not matched, it will fall back to the below handlers
 app.use(notFound);
