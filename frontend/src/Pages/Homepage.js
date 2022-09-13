@@ -28,7 +28,7 @@ const Homepage = () => {
     if (currentUser !== null) {
       navigate('/chats');
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <>
