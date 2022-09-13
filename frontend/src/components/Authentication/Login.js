@@ -11,6 +11,8 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { setCurrentUserCredentialsToStore } from '../../redux/slices/chatReducer';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const [email, setEmail] = useState();
@@ -19,6 +21,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -56,9 +59,10 @@ const Login = () => {
         isClosable: true,
         position: 'top',
       });
-      localStorage.setItem('User-Info', JSON.stringify(data));
+      localStorage.setItem('userInfo', JSON.stringify(data));
       setLoading(false);
       navigate('/chats');
+      dispatch(setCurrentUserCredentialsToStore());
     } catch (error) {
       toast({
         title: 'Something went wrong !',

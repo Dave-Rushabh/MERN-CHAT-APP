@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   Box,
@@ -12,8 +12,24 @@ import {
 
 import Login from '../components/Authentication/Login';
 import SignUp from '../components/Authentication/SignUp';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUserCredentialsToStore } from '../redux/slices/chatReducer';
 
 const Homepage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.chatReducer);
+  useEffect(() => {
+    dispatch(setCurrentUserCredentialsToStore());
+  }, []);
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate('/chats');
+    }
+  }, []);
+
   return (
     <>
       <Container maxW="xl" centerContent>
