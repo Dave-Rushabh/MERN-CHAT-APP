@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Box } from '@chakra-ui/react';
+import Header from '../components/ChatPage/Header';
+import MyChats from '../components/ChatPage/MyChats';
+import ChatBox from '../components/ChatPage/ChatBox';
 
 const Chatpage = () => {
   const navigate = useNavigate();
@@ -14,7 +18,25 @@ const Chatpage = () => {
     }
   }, [currentUser]);
 
-  return <div>Chatpage</div>;
+  return (
+    <>
+      <Box width="100%">
+        {currentUser && <Header currentUser={currentUser} />}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          width="100%"
+          height="90vh"
+          padding="24px"
+          backgroundColor="white"
+          my="2.5"
+        >
+          {currentUser && <MyChats />}
+          {currentUser && <ChatBox />}
+        </Box>
+      </Box>
+    </>
+  );
 };
 
 export default Chatpage;
