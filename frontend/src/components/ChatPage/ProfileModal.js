@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Box,
-  Button,
   Divider,
   IconButton,
   Image,
@@ -9,7 +8,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
@@ -19,7 +17,7 @@ import { ImEye } from 'react-icons/im';
 
 const ProfileModal = ({ currentUser, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { _id, name, email, pic } = currentUser;
+  const { name, email, pic } = currentUser;
 
   return (
     <>

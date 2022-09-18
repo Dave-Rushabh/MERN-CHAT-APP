@@ -26,10 +26,9 @@ const Chatpage = () => {
           display="flex"
           justifyContent="space-between"
           width="100%"
-          height="90vh"
+          height="95vh"
           padding="24px"
           backgroundColor="white"
-          my="2.5"
         >
           {currentUser && <MyChats />}
           {currentUser && <ChatBox />}
