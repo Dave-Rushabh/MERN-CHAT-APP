@@ -9,6 +9,7 @@ import {
 import { BsFillPeopleFill } from 'react-icons/bs';
 import ChatLoading from './ChatLoading';
 import { getSender } from '../../config/ChatLogics';
+import GroupModal from './GroupModal';
 
 const MyChats = () => {
   const [loggedUser, setLoggedUser] = useState();
@@ -54,8 +55,6 @@ const MyChats = () => {
         bg="white"
         width={{ base: '100%', md: '50%', lg: '30%' }}
         borderRadius="lg"
-        borderWidth="2px"
-        borderColor="#023047"
       >
         <Box
           pb={3}
@@ -67,20 +66,21 @@ const MyChats = () => {
           color="#023047"
         >
           Chats
-          <Button
-            display="flex"
-            fontSize={{ base: '10px', md: '15px', sm: '10px' }}
-            rightIcon={<BsFillPeopleFill color="#023047" />}
-            color="#023047"
-          >
-            New Group
-          </Button>
+          <GroupModal>
+            <Button
+              display="flex"
+              fontSize={{ base: '10px', md: '15px', sm: '10px' }}
+              rightIcon={<BsFillPeopleFill color="#023047" />}
+              color="#023047"
+            >
+              New Group
+            </Button>
+          </GroupModal>
         </Box>
         <Box
           display="flex"
           flexDirection="column"
           p={3}
-          bg="#f8f8f8"
           width="100%"
           height="100%"
           borderRadius="lg"
@@ -98,6 +98,9 @@ const MyChats = () => {
                   py={2}
                   borderRadius="lg"
                   key={chat._id}
+                  _hover={{
+                    border: '1px solid #023017',
+                  }}
                 >
                   <Text
                     fontFamily="cursive"
@@ -106,7 +109,7 @@ const MyChats = () => {
                     textOverflow="ellipsis"
                   >
                     {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users)
+                      ? getSender(loggedUser, chat?.users)
                       : chat.chatName}
                   </Text>
                 </Box>

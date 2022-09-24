@@ -90,7 +90,7 @@ const Login = () => {
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
-            placeholder="Set Your Password"
+            placeholder="Enter Your Password"
             type={showPassword ? 'text' : 'password'}
             onChange={(event) => setPassword(event.target.value)}
             value={password}

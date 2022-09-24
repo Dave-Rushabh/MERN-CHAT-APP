@@ -32,6 +32,7 @@ import {
 import axios from 'axios';
 import ChatLoading from './ChatLoading';
 import UserListItem from './UserListItem';
+import { useNavigate } from 'react-router-dom';
 
 const Header = ({ currentUser }) => {
   const [search, setSearch] = useState('');
@@ -43,6 +44,7 @@ const Header = ({ currentUser }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, pic, token } = currentUser;
   const { allChats } = useSelector((state) => state.chatReducer);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('userInfo');
@@ -54,6 +56,7 @@ const Header = ({ currentUser }) => {
       isClosable: true,
       position: 'top',
     });
+    navigate('/');
   };
 
   const handleSearch = async () => {
@@ -130,8 +133,6 @@ const Header = ({ currentUser }) => {
         width="100%"
         p="5px 10px"
         background="white"
-        borderBottomWidth="2px"
-        borderBottomColor="#023047"
       >
         <Button variant="ghost" onClick={onOpen}>
           <BsSearch color="#023047" />

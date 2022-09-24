@@ -3,9 +3,6 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url(./utils/ChatBG.jpg);
-  background-size: cover;
-  background-position: center;
   font-family: 'Poppins', sans-serif;
 }
 

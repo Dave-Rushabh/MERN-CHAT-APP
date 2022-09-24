@@ -26,9 +26,9 @@ const Chatpage = () => {
           display="flex"
           justifyContent="space-between"
           width="100%"
-          height="95vh"
+          height="93vh"
           padding="24px"
-          backgroundColor="white"
+          backgroundImage="radial-gradient(ellipse farthest-corner at 120% 180%, #3c84cc 0%, #8ecae6 70%, #4e95d3 70%)"
         >
           {currentUser && <MyChats />}
           {currentUser && <ChatBox />}
