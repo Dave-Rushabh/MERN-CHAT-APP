@@ -11,7 +11,7 @@ import ChatLoading from './ChatLoading';
 import { getSender } from '../../config/ChatLogics';
 import GroupModal from './GroupModal';
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { currentUser, selectedChat, allChats } = useSelector(
     (state) => state.chatReducer,
@@ -43,7 +43,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(currentUser);
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <>
@@ -53,7 +53,7 @@ const MyChats = () => {
         alignItems="center"
         p={3}
         bg="white"
-        width={{ base: '100%', md: '50%', lg: '30%' }}
+        width={{ base: '100%', md: '37%', lg: '30%' }}
         borderRadius="lg"
       >
         <Box
@@ -99,7 +99,8 @@ const MyChats = () => {
                   borderRadius="lg"
                   key={chat._id}
                   _hover={{
-                    border: '1px solid #023017',
+                    bg: selectedChat !== chat && '#ef233c',
+                    color: selectedChat !== chat && 'white',
                   }}
                 >
                   <Text

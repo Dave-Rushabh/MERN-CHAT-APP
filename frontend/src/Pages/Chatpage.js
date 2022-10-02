@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Box } from '@chakra-ui/react';
@@ -8,6 +8,7 @@ import ChatBox from '../components/ChatPage/ChatBox';
 
 const Chatpage = () => {
   const navigate = useNavigate();
+  const [fetchAgain, setFetchAgain] = useState(false);
 
   // destructure the chatReducer's state from here and use it as and when required
   const { currentUser } = useSelector((state) => state.chatReducer);
@@ -30,8 +31,10 @@ const Chatpage = () => {
           padding="24px"
           backgroundImage="radial-gradient(ellipse farthest-corner at 120% 180%, #3c84cc 0%, #8ecae6 70%, #4e95d3 70%)"
         >
-          {currentUser && <MyChats />}
-          {currentUser && <ChatBox />}
+          {currentUser && <MyChats fetchAgain={fetchAgain} />}
+          {currentUser && (
+            <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+          )}
         </Box>
       </Box>
     </>

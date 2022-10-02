@@ -7,7 +7,12 @@ import ProfileModal from './ProfileModal';
 // delete feature to be implemented,
 
 // user profile modal shall be visible for selected user
-const UserBadgeItem = ({ user, handleDelete }) => {
+const UserBadgeItem = ({
+  user,
+  handleDelete,
+  currentUser = {},
+  selectedChat,
+}) => {
   return (
     <HStack
       px={2}
@@ -21,7 +26,15 @@ const UserBadgeItem = ({ user, handleDelete }) => {
       background="#2F6690"
       color="white"
     >
-      <Box>{user.name}</Box>
+      <Box>
+        {user.name === currentUser.name
+          ? user.name === selectedChat.groupAdmin.name
+            ? `${user.name} (You) - Admin`
+            : `${user.name} (You)`
+          : user.name === selectedChat.groupAdmin.name
+          ? `${user.name} - Admin`
+          : `${user.name}`}
+      </Box>
       <ProfileModal currentUser={user}>
         <Tooltip label="View user Profile" hasArrow placement="bottom" my={4}>
           <Box cursor="pointer">
