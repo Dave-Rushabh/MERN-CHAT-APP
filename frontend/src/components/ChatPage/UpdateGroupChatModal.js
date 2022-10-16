@@ -28,6 +28,7 @@ const UpdateGroupChatModal = ({
   setSelectedChatToStore,
   currentUser,
   selectedChat,
+  fetchMessages,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
@@ -79,6 +80,7 @@ const UpdateGroupChatModal = ({
         ? dispatch(setSelectedChatToStore())
         : dispatch(setSelectedChatToStore(data));
       setFetchAgain(!fetchAgain);
+      fetchMessages();
       setLoading(false);
       toast({
         title:
