@@ -1,40 +1,45 @@
 import { Avatar, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
-import {
-  isLastMessage,
-  isSameSender,
-  isSameSenderMargin,
-  isSameUser,
-} from '../../config/ChatLogics';
+import { isSameSenderMargin, isSameUser } from '../../config/ChatLogics';
 
 const ScrollableChat = ({ messages, currentUser }) => {
-  /**
-   * TODO : to fix the user profile picture not placed properly..
-   */
+  const array1 = messages.map((message) =>
+    message.sender._id !== currentUser._id ? message : 'x',
+  );
+  const array2 = array1.map((val, idx) =>
+    typeof val === 'object' &&
+    (array1[idx + 1] === 'x' || array1[idx + 1] === undefined)
+      ? idx
+      : undefined,
+  );
+  const array3 = messages.map((val, idx) =>
+    array2[idx] !== undefined
+      ? { ...val, photo: true }
+      : { ...val, photo: false },
+  );
   return (
     <>
       <ScrollableFeed>
-        {messages &&
-          messages.map((message, index) => (
+        {array3 &&
+          array3.map((message, index) => (
             <div key={index} style={{ display: 'flex' }}>
-              {isSameSender(messages, message, index, currentUser._id) ||
-                (isLastMessage(messages, index, currentUser._id) && (
-                  <Tooltip
-                    label={message?.sender?.name}
-                    placement="bottom-start"
-                    hasArrow
-                  >
-                    <Avatar
-                      mt="7px"
-                      mr={1}
-                      size="sm"
-                      cursor="pointer"
-                      name={message?.sender?.name}
-                      src={message?.sender?.pic}
-                    />
-                  </Tooltip>
-                ))}
+              {message.photo && (
+                <Tooltip
+                  label={message?.sender?.name}
+                  placement="bottom-start"
+                  hasArrow
+                >
+                  <Avatar
+                    mt="7px"
+                    mr={1}
+                    size="sm"
+                    cursor="pointer"
+                    name={message?.sender?.name}
+                    src={message?.sender?.pic}
+                  />
+                </Tooltip>
+              )}
               <span
                 style={{
                   backgroundColor: `${
