@@ -2,6 +2,7 @@ import { Avatar, Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
 import { isSameSenderMargin, isSameUser } from '../../config/ChatLogics';
+import ProfileModal from './ProfileModal';
 
 const ScrollableChat = ({ messages, currentUser }) => {
   const array1 = messages.map((message) =>
@@ -9,7 +10,9 @@ const ScrollableChat = ({ messages, currentUser }) => {
   );
   const array2 = array1.map((val, idx) =>
     typeof val === 'object' &&
-    (array1[idx + 1] === 'x' || array1[idx + 1] === undefined)
+    (array1[idx + 1] === 'x' ||
+      array1[idx + 1] === undefined ||
+      val?.sender._id !== array1[idx + 1]?.sender._id)
       ? idx
       : undefined,
   );
@@ -18,6 +21,8 @@ const ScrollableChat = ({ messages, currentUser }) => {
       ? { ...val, photo: true }
       : { ...val, photo: false },
   );
+
+  console.log(array2, 'array2');
   return (
     <>
       <ScrollableFeed>
@@ -25,20 +30,22 @@ const ScrollableChat = ({ messages, currentUser }) => {
           array3.map((message, index) => (
             <div key={index} style={{ display: 'flex' }}>
               {message.photo && (
-                <Tooltip
-                  label={message?.sender?.name}
-                  placement="bottom-start"
-                  hasArrow
-                >
-                  <Avatar
-                    mt="7px"
-                    mr={1}
-                    size="sm"
-                    cursor="pointer"
-                    name={message?.sender?.name}
-                    src={message?.sender?.pic}
-                  />
-                </Tooltip>
+                <ProfileModal currentUser={message?.sender}>
+                  <Tooltip
+                    label={message?.sender?.name}
+                    placement="bottom-start"
+                    hasArrow
+                  >
+                    <Avatar
+                      mt="7px"
+                      mr={1}
+                      size="sm"
+                      cursor="pointer"
+                      name={message?.sender?.name}
+                      src={message?.sender?.pic}
+                    />
+                  </Tooltip>
+                </ProfileModal>
               )}
               <span
                 style={{
