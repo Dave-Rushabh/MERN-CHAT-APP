@@ -17,6 +17,10 @@ import ProfileModal from '../ChatPage/ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
 import '../ChatPage/styles/SingleChat.css';
 import ScrollableChat from './ScrollableChat';
+import io from 'socket.io-client';
+
+const END_POINT = 'http://localhost:5000'; // we give backend server link to frontend
+let socket, selectedChatCompare;
 
 const SingleChat = ({
   fetchAgain,
@@ -28,8 +32,26 @@ const SingleChat = ({
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
+  const [socketConnected, setSocketConnected] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
+
+  useEffect(() => {
+    socket = io(END_POINT);
+    /**
+     * There is a method in server.js file's socket with the same name "setup".
+     * which takes the current user data to give a seperate room to keep track of the notifications.
+     */
+    socket.emit('setup', currentUser);
+    /**
+     * The name to the socket io is given as "connection" in server.js file
+     * When the server is started we then pass a callback function.
+     * This function does whatever we want as soon as the socket io connection is established.
+     */
+    socket.on('connection', () => {
+      setSocketConnected(true);
+    });
+  }, []);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -47,6 +69,10 @@ const SingleChat = ({
       );
       setMessages(data);
       setLoading(false);
+      /**
+       * Whenever the user selects a chat,the user will be added into that room in socket to receive the notifications
+       */
+      socket.emit('join chat', selectedChat._id);
     } catch (error) {
       toast({
         title: 'Error while fetching the messages...',
@@ -76,6 +102,10 @@ const SingleChat = ({
           },
           config,
         );
+        /**
+         * This below socket will be emitted when a new message is sent by the user.
+         */
+        socket.emit('new message', data);
         setMessages((prev) => [...prev, data]);
       } catch (error) {
         toast({
@@ -97,7 +127,24 @@ const SingleChat = ({
 
   useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  /**
+   * The below useEffect will render each time when the socket emits "message received" handler.
+   */
+  useEffect(() => {
+    socket.on('message received', (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        //give notification
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  });
 
   return (
     <>

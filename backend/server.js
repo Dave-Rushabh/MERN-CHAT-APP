@@ -32,4 +32,47 @@ app.use('/api/messages', messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, console.log(`started server on port ${PORT}`));
+const server = app.listen(PORT, console.log(`started server on port ${PORT}`));
+
+const io = require('socket.io')(server, {
+  pingTimeOut: 60000, // goes into inactive state if no message received for 1 minute
+  cors: {
+    origin: 'http://localhost:3000', // we give frontend server link to the backend
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('connected to socket.io');
+
+  /**
+   * The below function is a primary connection for a logged in user.
+   */
+  socket.on('setup', (userData) => {
+    socket.join(userData._id); // takes the user information from the frontend
+    socket.emit('connected'); // starts the seperate room for the given user
+    console.log(userData._id);
+  });
+
+  /**
+   * The below function connectes the other user(s) with the same chat.
+   */
+  socket.on('join chat', (room) => {
+    socket.join(room);
+    console.log(`user joined the room : ${room}`);
+  });
+
+  /**
+   * This is the logic below.
+   * When i as a user send a message the notification should go to all the users except me.
+   */
+  socket.on('new message', (newMessageReceived) => {
+    let chat = newMessageReceived.chat;
+
+    if (!chat.users) return console.log('chat.users do not exist');
+
+    chat.users.map((user) => {
+      if (user._id === newMessageReceived.sender._id) return;
+      socket.in(user._id).emit('message received', newMessageReceived);
+    });
+  });
+});
