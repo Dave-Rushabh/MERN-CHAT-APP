@@ -18,6 +18,7 @@ import UpdateGroupChatModal from './UpdateGroupChatModal';
 import '../ChatPage/styles/SingleChat.css';
 import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
+import TypingIndicator from './TypingIndicator';
 
 const END_POINT = 'http://localhost:5000'; // we give backend server link to frontend
 let socket, selectedChatCompare;
@@ -33,6 +34,8 @@ const SingleChat = ({
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
 
@@ -44,12 +47,26 @@ const SingleChat = ({
      */
     socket.emit('setup', currentUser);
     /**
-     * The name to the socket io is given as "connection" in server.js file
+     * The name to the socket io is given as "connection / connected" in server.js file
      * When the server is started we then pass a callback function.
      * This function does whatever we want as soon as the socket io connection is established.
      */
-    socket.on('connection', () => {
+    socket.on('connected', () => {
       setSocketConnected(true);
+    });
+
+    /**
+     * The below socket activates the isTyping state to be true when "typing" socket is emitted.
+     */
+    socket.on('typing', () => {
+      setIsTyping(true);
+    });
+
+    /**
+     * The below socket activates the isTyping state to be false when "stop typing" socket is emitted.
+     */
+    socket.on('stop typing', () => {
+      setIsTyping(false);
     });
   }, []);
 
@@ -92,6 +109,11 @@ const SingleChat = ({
           Authorization: `Bearer ${currentUser.token}`,
         },
       };
+      /**
+       * Stops the typing indication when the message is sent by emitting the "stop typing" socket.
+       */
+      socket.emit('stop typing', selectedChat._id);
+
       try {
         setNewMessage('');
         const { data } = await axios.post(
@@ -123,6 +145,32 @@ const SingleChat = ({
     setNewMessage(event.target.value);
 
     // typing indicatore logic here
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      /**
+       * Emits the "typing" socket and will be activated by Backend.
+       */
+      socket.emit('typing', selectedChat._id);
+    }
+
+    /**
+     * Creating a debounce like function to stop the typing indication.
+     * If the user has not typed for some specific time, the typing indication will be stopped.
+     */
+
+    let lastTypingTime = new Date().getTime();
+    let timerLength = 3000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit('stop typing', selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   useEffect(() => {
@@ -221,6 +269,7 @@ const SingleChat = ({
               </>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              {isTyping && <TypingIndicator />}
               <Input
                 variant="filled"
                 bg="# E0E0E0"

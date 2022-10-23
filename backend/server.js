@@ -62,6 +62,20 @@ io.on('connection', (socket) => {
   });
 
   /**
+   * The below socket is for typing start identification
+   */
+  socket.on('typing', (room) => {
+    socket.in(room).emit('typing');
+  });
+
+  /**
+   * The below socket is for typing end identification
+   */
+  socket.on('stop typing', (room) => {
+    socket.in(room).emit('stop typing');
+  });
+
+  /**
    * This is the logic below.
    * When i as a user send a message the notification should go to all the users except me.
    */
@@ -74,5 +88,13 @@ io.on('connection', (socket) => {
       if (user._id === newMessageReceived.sender._id) return;
       socket.in(user._id).emit('message received', newMessageReceived);
     });
+  });
+
+  /**
+   * Clean up of socket
+   */
+  socket.off('setup', () => {
+    console.log('USER DISCONNECTED');
+    socket.leave(userData._id);
   });
 });
