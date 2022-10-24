@@ -29,6 +29,8 @@ const SingleChat = ({
   setSelectedChatToStore,
   currentUser,
   selectedChat,
+  notifications,
+  setNotificationsToStore,
 }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -176,6 +178,11 @@ const SingleChat = ({
   useEffect(() => {
     fetchMessages();
     selectedChatCompare = selectedChat;
+    dispatch(
+      setNotificationsToStore(
+        notifications.filter((n) => n.chat._id !== selectedChat._id),
+      ),
+    );
   }, [selectedChat]);
 
   /**
@@ -188,6 +195,12 @@ const SingleChat = ({
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
         //give notification
+        if (!notifications.includes(newMessageReceived)) {
+          dispatch(
+            setNotificationsToStore([newMessageReceived, ...notifications]),
+          );
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessages([...messages, newMessageReceived]);
       }

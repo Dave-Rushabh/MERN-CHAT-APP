@@ -6,6 +6,7 @@ const chatSlice = createSlice({
     currentUser: null,
     selectedChat: null,
     allChats: [],
+    notifications: [],
   },
   reducers: {
     setCurrentUserCredentialsToStore: (state) => {
@@ -17,6 +18,9 @@ const chatSlice = createSlice({
     setChatsToStore: (state, { payload }) => {
       state.allChats = payload;
     },
+    setNotificationsToStore: (state, { payload }) => {
+      state.notifications = payload;
+    },
   },
 });
 
@@ -25,4 +29,5 @@ export const {
   setCurrentUserCredentialsToStore,
   setSelectedChatToStore,
   setChatsToStore,
+  setNotificationsToStore,
 } = chatSlice.actions;

@@ -28,13 +28,17 @@ import {
   setChatsToStore,
   setCurrentUserCredentialsToStore,
   setSelectedChatToStore,
+  setNotificationsToStore,
 } from '../../redux/slices/chatReducer';
 import axios from 'axios';
 import ChatLoading from './ChatLoading';
 import UserListItem from './UserListItem';
 import { useNavigate } from 'react-router-dom';
+import { getSender } from '../../config/ChatLogics';
+import { Effect } from 'react-notification-badge';
+import NotificationBadge from 'react-notification-badge';
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, notifications }) => {
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -156,9 +160,39 @@ const Header = ({ currentUser }) => {
         >
           <Menu>
             <MenuButton p={1} m={1}>
+              <NotificationBadge
+                count={notifications.length}
+                effect={Effect.SCALE}
+              />
               <FaBell fontSize="1.3rem" color="#023047" />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList
+              pl={!notifications.length && 2}
+              border="2px solid #023047"
+              fontSize="12px"
+            >
+              {!notifications.length && 'All clear !'}
+              {notifications.map((notification) => (
+                <MenuItem
+                  key={notification._id.toString()}
+                  onClick={() => {
+                    dispatch(setSelectedChatToStore(notification.chat));
+                    dispatch(
+                      setNotificationsToStore(
+                        notifications.filter((notif) => notif !== notification),
+                      ),
+                    );
+                  }}
+                >
+                  {notification.chat.isGroupChat
+                    ? `New Message in ${notification.chat.chatName}`
+                    : `New Message from ${getSender(
+                        currentUser,
+                        notification.chat.users,
+                      )}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton variant="ghost" p={1}>

@@ -22,7 +22,6 @@ const ScrollableChat = ({ messages, currentUser }) => {
       : { ...val, photo: false },
   );
 
-  console.log(array2, 'array2');
   return (
     <>
       <ScrollableFeed>

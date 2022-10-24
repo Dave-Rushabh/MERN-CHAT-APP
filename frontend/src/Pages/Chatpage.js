@@ -11,7 +11,9 @@ const Chatpage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
 
   // destructure the chatReducer's state from here and use it as and when required
-  const { currentUser } = useSelector((state) => state.chatReducer);
+  const { currentUser, notifications } = useSelector(
+    (state) => state.chatReducer,
+  );
 
   useEffect(() => {
     if (currentUser === null) {
@@ -22,7 +24,9 @@ const Chatpage = () => {
   return (
     <>
       <Box width="100%">
-        {currentUser && <Header currentUser={currentUser} />}
+        {currentUser && (
+          <Header currentUser={currentUser} notifications={notifications} />
+        )}
         <Box
           display="flex"
           justifyContent="space-between"

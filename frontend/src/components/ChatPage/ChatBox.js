@@ -1,11 +1,14 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { setSelectedChatToStore } from '../../redux/slices/chatReducer';
+import {
+  setSelectedChatToStore,
+  setNotificationsToStore,
+} from '../../redux/slices/chatReducer';
 import SingleChat from './SingleChat';
 
 const ChatBox = ({ fetchAgain, setFetchAgain }) => {
-  const { currentUser, selectedChat } = useSelector(
+  const { currentUser, selectedChat, notifications } = useSelector(
     (state) => state.chatReducer,
   );
   return (
@@ -26,6 +29,8 @@ const ChatBox = ({ fetchAgain, setFetchAgain }) => {
           setSelectedChatToStore={setSelectedChatToStore}
           currentUser={currentUser}
           selectedChat={selectedChat}
+          notifications={notifications}
+          setNotificationsToStore={setNotificationsToStore}
         />
       </Box>
     </>
