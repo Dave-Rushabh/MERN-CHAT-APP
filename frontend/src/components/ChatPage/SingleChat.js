@@ -20,7 +20,7 @@ import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
 import TypingIndicator from './TypingIndicator';
 
-const END_POINT = 'http://localhost:5000'; // we give backend server link to frontend
+const END_POINT = 'https://mern-converse.herokuapp.com/'; // we give backend server link to frontend
 let socket, selectedChatCompare;
 
 const SingleChat = ({
