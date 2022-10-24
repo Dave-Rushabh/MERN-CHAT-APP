@@ -4,6 +4,7 @@ const connectDB = require('./configs/db');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const path = require('path');
 
 // add all other routes here
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
@@ -27,6 +28,23 @@ const PORT = process.env.PORT || 7000;
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/messages', messageRoutes);
+
+/**
+ * DEPLOYMENT RELATED CODE STARTS HERE
+ */
+
+const __dirname = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+  // Establishing the path from current working directory to the build version
+  app.use(express.static(path.join(__dirname, 'fronend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
+/**
+ * DEPLOYMENT RELATED CODE ENDS HERE
+ */
 
 // if any route is not matched, it will fall back to the below handlers
 app.use(notFound);
