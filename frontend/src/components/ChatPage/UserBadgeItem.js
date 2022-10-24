@@ -28,10 +28,10 @@ const UserBadgeItem = ({
     >
       <Box>
         {user.name === currentUser.name
-          ? user.name === selectedChat.groupAdmin.name
+          ? user.name === selectedChat?.groupAdmin?.name
             ? `${user.name} (You) - Admin`
             : `${user.name} (You)`
-          : user.name === selectedChat.groupAdmin.name
+          : user.name === selectedChat?.groupAdmin?.name
           ? `${user.name} - Admin`
           : `${user.name}`}
       </Box>
